@@ -11,7 +11,7 @@ const ExercisesList = () => {
     getExercises();
   }, []);
 
-  function getExercises(){
+  const getExercises = () => {
     axios.get('http://localhost:5000/exercises/')
       .then(response => {
         setExercises(response.data)
