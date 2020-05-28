@@ -1,44 +1,38 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import Exercise from './exercise.component'
 
-class ExercisesList extends Component {
+const ExercisesList = () => {
 
-  constructor(props) {
-    super(props);
+  const [exercises, setExercises] = useState([]);
 
-    this.deleteExercise = this.deleteExercise.bind(this);
+  useEffect(() => {
+    getExercises();
+  }, []);
 
-    this.state = {exercises: []};
-  }
-
-  componentDidMount() {
+  function getExercises(){
     axios.get('http://localhost:5000/exercises/')
       .then(response => {
-        this.setState({ exercises: response.data })
+        setExercises(response.data)
       })
       .catch((error) => {
         console.log(error);
       })
   }
 
-  deleteExercise(id) {
+  const deleteExercise = (id) => {
     axios.delete('http://localhost:5000/exercises/'+id)
       .then(res => console.log(res.data));
 
-    this.setState({
-      exercises: this.state.exercises.filter(el => el._id !== id)
-    })
+    setExercises(exercises.filter(el => el._id !== id))
   }
 
-  exerciseList() {
-    return this.state.exercises.map(currentExercise => {
-      return <Exercise exercise={currentExercise} deleteExercise={this.deleteExercise} key={currentExercise._id} />;
+  const exerciseList = () =>  {
+    return exercises.map(currentExercise => {
+      return <Exercise exercise={currentExercise} deleteExercise={deleteExercise} key={currentExercise._id} />;
     })
   }
-
-  render(){
     return (
       <div>
         <h3>Logged Exercises</h3>
@@ -53,12 +47,11 @@ class ExercisesList extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.exerciseList()}
+            {exerciseList()}
           </tbody>
         </table>
       </div>
     )
-  }
 }
 
 export default ExercisesList;
