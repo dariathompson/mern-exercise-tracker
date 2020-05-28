@@ -20,10 +20,9 @@ const CreateUser = () =>  {
     axios.post('http://localhost:5000/users/add', user)
       .then(res => console.log(res.data));
   
-      setUsername('')
+    setUsername('')
   }
     
-  
   return (
     <div>
       <h3>Create New User</h3>
